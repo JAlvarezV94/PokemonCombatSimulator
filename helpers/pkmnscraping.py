@@ -8,7 +8,7 @@ import files
 pkmonJsonString = "{\n\t\"firstGen\": [\n"
 baseURL = "http://pokedream.com"
 gen1URL = "/pokedex/pokemon?display=gen1"
-pathToSave = pathlib.Path(__file__)
+pathToSave = "/home/jnoma/workspace/python/pkmn_cs/pkmn.json"
 
 pokedreamPage = requests.get(baseURL + gen1URL)
 soup = BeautifulSoup(pokedreamPage.content, "html.parser")
@@ -70,4 +70,4 @@ pkmonJsonString = pkmonJsonString[:len(pkmonJsonString) -5 ]
 pkmonJsonString += "\n\t\t}"
 pkmonJsonString += "\n\t]\n}"
 
-files.writeJSONInFile(, pkmonJsonString)
+files.writeJSONInFile(pathToSave, pkmonJsonString)

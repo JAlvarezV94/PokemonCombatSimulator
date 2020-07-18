@@ -1,46 +1,43 @@
 import os
 
 import models.pokemon as pokemon
-import tuples.types as pokemonType
-
-
-def createInitialPokemons():
-    global pokemon1
-    global pokemon2
-    global pokemon3
-    
-    pokemon1 = pokemon.Pokemon('Charmander', pokemonType["FIRE"], 5, ['scratch', 'whipe'])
-    pokemon2 = pokemon.Pokemon('Squirtle', pokemonType.WATER, 5, ['scratch', 'whipe'])
-    pokemon3 = pokemon.Pokemon('Bulbasaur', pokemonType.GRASS, 5, ['tackle', 'whipe'])
+import const.initials as cinitials
+import const.files as cfiles
+import helpers.files as hfiles
+import helpers.jsonparser as jparser
 
 def chooseInitialPokemon():
 
-    canContinue = False
-    response = ''
-    counter = 1
-    initials = [pokemon1, pokemon2, pokemon3]
+    # Get initial's info
 
-    while canContinue == False:
-        print("What Pokemon do you choose?\n")
+    initial1 = jparser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, cinitials.BULBASAUR))
+    initial2 = jparser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, cinitials.CHARMANDER))
+    initial3 = jparser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, cinitials.SQUIRTLE))
 
-        for currentPokemon in initials:
-            print(str(counter) + ' - {0} the {1} type.'.format(currentPokemon.name, currentPokemon.type))
+    initials = [initial1, initial2, initial3]
+
+    # Choosing initial
+
+    myInitial = None
+    
+    while myInitial == None:
+        counter = 1
+        print("What pokemon do you choose?")
+
+        for currentPkmn in initials:
+            print(str(counter) + " - {} the {} type pokemon.".format(initials[counter - 1].name, initials[counter - 1].type))
             counter += 1
 
         response = input()
         
         if response == str(1) or response == str(2) or response == str(3):
-            canContinue = True
+            myInitial = initials[int(response) - 1]
         else:
-            counter = 1
-            os.system('clear')
-    
-    intResponse = int(response) - 1
-    return initials[intResponse]
+            os.system("clear")
 
-
+    return myInitial
 
 # Starting game
-createInitialPokemons()
-myPokemon = chooseInitialPokemon()
-myPokemon.describePokemon()
+
+chosenPkmn = chooseInitialPokemon()
+chosenPkmn.describePokemon()
