@@ -1,10 +1,14 @@
 import requests
 import json
+import pathlib
 from bs4 import BeautifulSoup
 
+import files
 
+pkmonJsonString = "{\n\t\"firstGen\": [\n"
 baseURL = "http://pokedream.com"
 gen1URL = "/pokedex/pokemon?display=gen1"
+pathToSave = pathlib.Path(__file__)
 
 pokedreamPage = requests.get(baseURL + gen1URL)
 soup = BeautifulSoup(pokedreamPage.content, "html.parser")
@@ -13,7 +17,7 @@ pkmnTable = soup.find(id="pokemon-table")
 
 tableRows = pkmnTable.find_all("tr")
 
-for counter in range(1, 10):
+for counter in range(1, 152):
     currentRow = tableRows[counter].find_all("td")
 
     # Get pokemon name
@@ -47,16 +51,23 @@ for counter in range(1, 10):
     speed = currentRow[10].getText()
     total = currentRow[11].getText()
 
-    print("--------------------------------------------")
-    print("NAME: " + pkmnName)
-    print("Nº " + pkmnIndex)
-    print("TYPE 1: " + type1)
-    print("TYPE 2: " + type2)
-    print("HP: " + hp)
-    print("ATTACK: " + attack)
-    print("DEFENSE: " + defense)
-    print("SP ATTACK: " + spAttack)
-    print("SP DEFENSE: " + spDefense)
-    print("SPEED: " + speed)
-    print("TOTAL: " + total)
-    print("--------------------------------------------")
+    # Writing in pkmnJson
+    pkmonJsonString += '\t\t{{\n' \
+        '\t\t\t"NAME": "{0}", \n' \
+        '\t\t\t"Nº": "{1}", \n' \
+        '\t\t\t"TYPE 1": "{2}", \n' \
+        '\t\t\t"TYPE 2": "{3}", \n' \
+        '\t\t\t"HP": {4}, \n' \
+        '\t\t\t"ATTACK": {5}, \n' \
+        '\t\t\t"DEFENSE": {6}, \n' \
+        '\t\t\t"SP ATTACK": {7}, \n' \
+        '\t\t\t"SP DEFENSE": {8}, \n' \
+        '\t\t\t"SPEED": {9}, \n' \
+        '\t\t\t"TOTAL": {10} \n \t\t}},\n'.format(pkmnName, pkmnIndex, type1, type2, hp, attack, defense, spAttack, spDefense,speed, total)
+
+
+pkmonJsonString = pkmonJsonString[:len(pkmonJsonString) -5 ]
+pkmonJsonString += "\n\t\t}"
+pkmonJsonString += "\n\t]\n}"
+
+files.writeJSONInFile(, pkmonJsonString)
