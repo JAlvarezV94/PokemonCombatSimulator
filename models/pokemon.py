@@ -1,6 +1,6 @@
 class Pokemon:
 
-    def __init__(self, name, pkmnType, level, attacks, aka = None,):
+    def __init__(self, name, pkmnType, level, attacks, aka = None, pkmnType2 = None):
         self.name = name
         self.aka = aka if aka != None else name 
         self.type = pkmnType
