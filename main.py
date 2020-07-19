@@ -15,14 +15,31 @@ size = width, height = config.SCREEN_WIDTH, config.SCREEN_HEIGHT
 speed = [2,2]
 horizontalSpace = config.HORIZONTAL_SPACE
 verticalSpace = config.VERTICAL_SPACE
-cursorY = config.CUSROR_INITIAL_POSITION_Y
-cursorX = config.CUSROR_INITIAL_POSITION_X
+cursorY = config.CURSOR_INITIAL_POSITION_Y
+cursorX = config.CURSOR_INITIAL_POSITION_X
 firstRow = 0
 
 # Starting game
 pygame.init()
 pygame.display.set_caption('Pkmn Combat Simulator')
 screen = pygame.display.set_mode(size)
+
+# Get pokemons in a matrix
+pkmnMatrix = []
+pkmnRow = []
+pkmnJSON = hfiles.readAllPkmn(cfiles.PKMN_JSON_PATH)
+counter = 0
+
+for currentPkmn in pkmnJSON:
+    
+    pkmnRow.append(currentPkmn)
+    counter += 1
+
+    if counter == config.MAX_COLUMNS or int(currentPkmn["Nº"]) == len(pkmnJSON):
+        pkmnMatrix.append(pkmnRow[:])
+        counter = 0
+        pkmnRow = []
+
 
 while 1:
     
@@ -32,32 +49,24 @@ while 1:
 
         # Add listener to move the cursor
         if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            cursorX += config.HORIZONTAL_SPACE
+            if cursorX < 280:
+                cursorX += config.HORIZONTAL_SPACE
         if pygame.key.get_pressed()[pygame.K_LEFT]:
-            cursorX -= config.HORIZONTAL_SPACE
+            if cursorX > 0:
+                cursorX -= config.HORIZONTAL_SPACE
         if pygame.key.get_pressed()[pygame.K_UP]:
-            cursorY -= config.VERTICAL_SPACE
+            if cursorY > 10:
+                cursorY -= config.VERTICAL_SPACE
+            elif firstRow > 0:
+                firstRow -= 1
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            cursorY += config.VERTICAL_SPACE
+            if cursorY < 150:
+                cursorY += config.VERTICAL_SPACE
+            elif firstRow < len(pkmnMatrix) - 3:
+                firstRow += 1
 
     # Add some color and title
     screen.fill(colors.WHITE)
-
-    # Get pokemons in a matrix
-    pkmnMatrix = []
-    pkmnRow = []
-    pkmnJSON = hfiles.readAllPkmn(cfiles.PKMN_JSON_PATH)
-    counter = 0
-
-    for currentPkmn in pkmnJSON:
-        
-        pkmnRow.append(currentPkmn)
-        counter += 1
-
-        if counter == config.MAX_COLUMNS:
-            pkmnMatrix.append(pkmnRow[:])
-            counter = 0
-            pkmnRow = []
 
     # Display the matrix
     currentVertical = config.INIT_VERTICAL
