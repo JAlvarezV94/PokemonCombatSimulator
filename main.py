@@ -1,5 +1,7 @@
 import os
 
+import sys, pygame
+
 import models.pokemon as pokemon
 import const.initials as cinitials
 import const.files as cfiles
@@ -39,5 +41,21 @@ def chooseInitialPokemon():
 
 # Starting game
 
-chosenPkmn = chooseInitialPokemon()
-chosenPkmn.describePokemon()
+# chosenPkmn = chooseInitialPokemon()
+# chosenPkmn.describePokemon()
+
+pygame.init()
+
+size = width, height = 320, 240
+speed = [2,2]
+black = 0, 0, 0
+
+screen = pygame.display.set_mode(size)
+
+while 1:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: sys.exit()
+    
+
+    screen.fill(black)
+    pygame.display.flip()
