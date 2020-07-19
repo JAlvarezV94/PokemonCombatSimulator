@@ -5,7 +5,7 @@ def writeJSONInFile(path, text):
         file = open(path, "w")
         file.write(text)
     except:
-        print("there was an error")
+        print("there was an error.")
 
 def readPkmnByIndex(path, index):
     try:
@@ -24,3 +24,15 @@ def readPkmnByIndex(path, index):
     
     strChosenPkmn = str(chosenPkmn).replace("'", "\"")
     return str(strChosenPkmn)
+
+def readAllPkmn(path):
+    try:
+        file = open(path, "r")
+        jsonString = file.read()
+        pkmnJson = json.loads(jsonString)
+        firstGen = pkmnJson["firstGen"]
+
+    except:
+        print("something went worng.")
+    
+    return firstGen
