@@ -1,0 +1,1 @@
+CHOOSING_SCENE = 0

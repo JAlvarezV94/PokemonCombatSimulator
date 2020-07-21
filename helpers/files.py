@@ -36,3 +36,21 @@ def readAllPkmn(path):
         print("something went worng.")
     
     return firstGen
+
+def readPkmnInMatrix(path, maxColumns):
+    pkmnMatrix = []
+    pkmnRow = []
+    pkmnJSON = readAllPkmn(path)
+    counter = 0
+
+    for currentPkmn in pkmnJSON:
+        
+        pkmnRow.append(currentPkmn)
+        counter += 1
+
+        if counter == maxColumns or int(currentPkmn["Nº"]) == len(pkmnJSON):
+            pkmnMatrix.append(pkmnRow[:])
+            counter = 0
+            pkmnRow = []
+    
+    return pkmnMatrix
