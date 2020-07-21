@@ -18,11 +18,22 @@ verticalSpace = config.VERTICAL_SPACE
 cursorY = config.CURSOR_INITIAL_POSITION_Y
 cursorX = config.CURSOR_INITIAL_POSITION_X
 firstRow = 0
+selectedPkmn = [0,0]
 
 # Starting game
 pygame.init()
 pygame.display.set_caption('Pkmn Combat Simulator')
 screen = pygame.display.set_mode(size)
+
+# Create fonts and add texts
+pkmnFont = pygame.font.Font("./src/fonts/pkmn_classic.ttf", 20)
+title = pkmnFont.render("CHOOSE YOUR POKEMON", False, colors.BLACK, None)
+titleRect = title.get_rect()
+titleRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y / 2))
+pkmnNameTxt = pkmnFont.render("", False, colors.BLACK, None)
+pkmnNameRect = pkmnNameTxt.get_rect()
+pkmnNameRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y * 5))
+
 
 # Get pokemons in a matrix
 pkmnMatrix = []
@@ -49,24 +60,39 @@ while 1:
 
         # Add listener to move the cursor
         if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            if cursorX < 280:
+            if cursorX < config.LIMIT_RIGHT:
                 cursorX += config.HORIZONTAL_SPACE
+            
+            if selectedPkmn[1] + 1 < len(pkmnMatrix[selectedPkmn[0]]):
+                selectedPkmn[1] += 1
+            
         if pygame.key.get_pressed()[pygame.K_LEFT]:
-            if cursorX > 0:
+            if cursorX > config.INIT_HORIZONTAL:
                 cursorX -= config.HORIZONTAL_SPACE
+
+            if selectedPkmn[1] - 1 >= 0:
+                selectedPkmn[1] -= 1
         if pygame.key.get_pressed()[pygame.K_UP]:
-            if cursorY > 10:
+            if cursorY > config.INIT_VERTICAL:
                 cursorY -= config.VERTICAL_SPACE
             elif firstRow > 0:
                 firstRow -= 1
+            if selectedPkmn[0] - 1 >= 0:
+                selectedPkmn[0] -= 1
+
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            if cursorY < 150:
+            if cursorY < config.LIMIT_DOWN:
                 cursorY += config.VERTICAL_SPACE
             elif firstRow < len(pkmnMatrix) - 3:
                 firstRow += 1
 
-    # Add some color and title
+            if selectedPkmn[0] + 1 < len(pkmnMatrix):
+                selectedPkmn[0] += 1
+
+    # Add some color and texts
     screen.fill(colors.WHITE)
+    screen.blit(title, titleRect)
+    screen.blit(pkmnNameTxt, pkmnNameRect)
 
     # Display the matrix
     currentVertical = config.INIT_VERTICAL
@@ -80,9 +106,11 @@ while 1:
             currentHorizontal += horizontalSpace
         currentVertical += verticalSpace
 
+    #Display current pkmn name
+    completePokemon = pkmnMatrix[selectedPkmn[0]][selectedPkmn[1]]
+    pkmnNameTxt = pkmnFont.render(completePokemon["NAME"], False, colors.BLACK, None)
+    
     # Add cursor
     pygame.draw.rect(screen, colors.BLACK, pygame.Rect(cursorX, cursorY, config.CURSOR_WIDTH, config.CURSOR_HEIGHT), 4)
-
-
 
     pygame.display.update()
