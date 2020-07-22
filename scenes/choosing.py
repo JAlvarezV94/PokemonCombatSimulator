@@ -1,3 +1,5 @@
+import pygame
+
 import const.colors as colors
 import const.files as cfiles
 
@@ -26,7 +28,7 @@ class Choosing:
         screen.blit(self.title, self.titleRect)
         screen.blit(self.pkmnNameTxt, self.pkmnNameRect)
 
-    def printPkmns(self, pygame, screen, pkmnMatrix, config):
+    def printPkmns(self, screen, pkmnMatrix, config):
         currentVertical = config.INIT_VERTICAL
         maxRows = self.firstRow + config.MAX_ROWS
         for index in range(self.firstRow, maxRows):
@@ -38,5 +40,37 @@ class Choosing:
                 currentHorizontal += self.horizontalSpace
             currentVertical += self.verticalSpace
     
-    def printCursor(self, pygame, screen):
+    def printCursor(self, screen, config):
         pygame.draw.rect(screen, colors.BLACK, pygame.Rect(self.cursorX, self.cursorY, config.CURSOR_WIDTH, config.CURSOR_HEIGHT), 4)
+
+
+    def moveToRight(self, config, pkmnMatrix):
+        if self.cursorX < config.LIMIT_RIGHT:
+            self.cursorX += config.HORIZONTAL_SPACE
+                
+        if self.selectedPkmn[1] + 1 < len(pkmnMatrix[self.selectedPkmn[0]]):
+            self.selectedPkmn[1] += 1
+
+    def moveToLeft(self, config, pkmnMatrix):
+        if self.cursorX > config.INIT_HORIZONTAL:
+            self.cursorX -= config.HORIZONTAL_SPACE
+
+        if self.selectedPkmn[1] - 1 >= 0:
+            self.selectedPkmn[1] -= 1
+
+    def moveToUp(self, config, pkmnMatrix):
+        if self.cursorY > config.INIT_VERTICAL:
+            self.cursorY -= config.VERTICAL_SPACE
+        elif self.firstRow > 0:
+            self.firstRow -= 1
+        if self.selectedPkmn[0] - 1 >= 0:
+            self.selectedPkmn[0] -= 1
+
+    def moveToDown(self, config, pkmnMatrix):
+        if self.cursorY < config.LIMIT_DOWN:
+            self.cursorY += config.VERTICAL_SPACE
+        elif self.firstRow < len(pkmnMatrix) - 3:
+            self.firstRow += 1
+
+        if self.selectedPkmn[0] + 1 < len(pkmnMatrix):
+            self.selectedPkmn[0] += 1
