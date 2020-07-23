@@ -1,4 +1,5 @@
 import pygame
+
 import const.scenes as cscenes
 import scenes.choosing as choosing
 
@@ -14,6 +15,8 @@ class Game:
     def initGame(self):
         pygame.init()
         pygame.display.set_caption('Pkmn Combat Simulator')
+        icon = pygame.image.load("./src/pcs-icon.png")
+        pygame.display.set_icon(icon)
         screen = pygame.display.set_mode((self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT))
         pkmnFont = pygame.font.Font("./src/fonts/pkmn_classic.ttf", 20)
 

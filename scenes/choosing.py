@@ -15,14 +15,17 @@ class Choosing:
         self.title = pkmnFont.render("CHOOSE YOUR POKEMON", False, colors.BLACK, None)
         self.titleRect = self.title.get_rect()
         self.titleRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y / 2))
-        self.pkmnNameTxt = pkmnFont.render("", False, colors.BLACK, None)
+        self.pkmnNameTxt = pkmnFont.render("Bulbasaur", False, colors.BLACK, None)
         self.pkmnNameRect = self.pkmnNameTxt.get_rect()
         self.pkmnNameRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y * 5))
 
     def printText(self, screen, pkmnMatrix, pkmnFont):
         #Get current Pokemon name
-        completePokemon = pkmnMatrix[self.selectedPkmn[0]][self.selectedPkmn[1]]
-        self.pkmnNameTxt = pkmnFont.render(completePokemon["NAME"], False, colors.BLACK, None)
+        if self.selectedPkmn[0] < len(pkmnMatrix) and self.selectedPkmn[1] < len(pkmnMatrix[self.selectedPkmn[0]]):
+            completePokemon = pkmnMatrix[self.selectedPkmn[0]][self.selectedPkmn[1]]
+            self.pkmnNameTxt = pkmnFont.render(completePokemon["NAME"], False, colors.BLACK, None)
+        else:
+            self.pkmnNameTxt = pkmnFont.render("", False, colors.BLACK, None)
 
         #Display screen text
         screen.blit(self.title, self.titleRect)
@@ -47,30 +50,27 @@ class Choosing:
     def moveToRight(self, config, pkmnMatrix):
         if self.cursorX < config.LIMIT_RIGHT:
             self.cursorX += config.HORIZONTAL_SPACE
-                
-        if self.selectedPkmn[1] + 1 < len(pkmnMatrix[self.selectedPkmn[0]]):
             self.selectedPkmn[1] += 1
 
     def moveToLeft(self, config, pkmnMatrix):
         if self.cursorX > config.INIT_HORIZONTAL:
             self.cursorX -= config.HORIZONTAL_SPACE
-
-        if self.selectedPkmn[1] - 1 >= 0:
             self.selectedPkmn[1] -= 1
+            
 
     def moveToUp(self, config, pkmnMatrix):
         if self.cursorY > config.INIT_VERTICAL:
             self.cursorY -= config.VERTICAL_SPACE
+            self.selectedPkmn[0] -= 1
         elif self.firstRow > 0:
             self.firstRow -= 1
-        if self.selectedPkmn[0] - 1 >= 0:
             self.selectedPkmn[0] -= 1
+
 
     def moveToDown(self, config, pkmnMatrix):
         if self.cursorY < config.LIMIT_DOWN:
             self.cursorY += config.VERTICAL_SPACE
+            self.selectedPkmn[0] += 1
         elif self.firstRow < len(pkmnMatrix) - 3:
             self.firstRow += 1
-
-        if self.selectedPkmn[0] + 1 < len(pkmnMatrix):
             self.selectedPkmn[0] += 1
