@@ -2,6 +2,8 @@ import pygame
 
 import const.colors as colors
 import const.files as cfiles
+import helpers.files as hfiles
+import helpers.jsonparser as parser
 
 class Choosing:
 
@@ -74,3 +76,11 @@ class Choosing:
         elif self.firstRow < len(pkmnMatrix) - 3:
             self.firstRow += 1
             self.selectedPkmn[0] += 1
+
+    def choosePokemon(self, pkmnMatrix):
+        if self.selectedPkmn[0] < len(pkmnMatrix) and self.selectedPkmn[1] < len(pkmnMatrix[self.selectedPkmn[0]]):
+            completePokemon = pkmnMatrix[self.selectedPkmn[0]][self.selectedPkmn[1]]
+            return parser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, completePokemon["Nº"]))
+        else:
+            return None
+        

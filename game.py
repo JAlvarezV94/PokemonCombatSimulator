@@ -1,4 +1,5 @@
 import pygame
+import random
 
 import const.scenes as cscenes
 import const.files as cfiles
@@ -14,7 +15,7 @@ class Game:
         self.config = config
         self.sceenColor = colors.WHITE
         self.pkmnMatrix = pkmnMatrix
-        self.currentScene = cscenes.BATTLE_SCENE
+        self.currentScene = cscenes.CHOOSING_SCENE
 
     def initGame(self):
         pygame.init()
@@ -51,6 +52,19 @@ class Game:
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         choosingScene.moveToDown(self.config, self.pkmnMatrix)
 
+                # Add listener to A B buttons
+                if pygame.key.get_pressed()[pygame.K_z]:
+                    if self.currentScene == cscenes.CHOOSING_SCENE:
+                        chosedPkmn = choosingScene.choosePokemon(self.pkmnMatrix)
+                    
+                        if chosedPkmn != None:
+                            battleScene.pkmn1 = chosedPkmn
+                            battleScene.pkmn2 = self.randomEnemy()
+                            self.currentScene = cscenes.BATTLE_SCENE
+                    if self.currentScene == cscenes.BATTLE_SCENE:
+                        print("battle!")
+                    
+
             # Adding configs
             screen.fill(self.sceenColor)
             
@@ -62,7 +76,15 @@ class Game:
             elif self.currentScene == cscenes.BATTLE_SCENE:
                 battleScene.printPkmns(screen, self.config)
                 battleScene.printDialogContainer(screen, self.config)
-                battleScene.printText(screen, "Un Bulbasaur salvaje apareció!", pkmnFont)
+                battleScene.printText(screen, "Un " + battleScene.pkmn2.name + " salvaje apareció!", pkmnFont)
 
             pygame.display.update()
 
+    def randomEnemy(self):
+        chosenRow = random.randint(0, len(self.pkmnMatrix))
+        chosenColumn = random.randint(0, len(self.pkmnMatrix[chosenRow]))
+        chosenPkmn = self.pkmnMatrix[chosenRow][chosenColumn]
+
+        pkmnJson = hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, chosenPkmn["Nº"])
+
+        return parser.parsePokemon(pkmnJson)
