@@ -4,11 +4,16 @@ import const.colors as colors
 
 class Battle:
 
-    def __init__(self, pkmn1, pkmn2):
+    def __init__(self, pkmn1, pkmn2, pkmnFont, config):
         self.pkmn1 = pkmn1
         self.pkmn2 = pkmn2
+        self.mainText = pkmnFont.render("", False, colors.BLACK, None)
+        self.mainTextRect = self.mainText.get_rect()
+        # self.mainTextRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y / 2))
+        self.mainTextRect.midleft = (config.DIALOG_MARGIN_SIDES, (config.SCREEN_HEIGHT - config.DIALOG_HEIGHT) + config.DIALOG_MARGIN_TOP)
 
 
+    # PUBLIC METHODS
     def printDialogContainer(self, screen, config):
         pygame.draw.rect(screen, colors.WHITE, pygame.Rect(0, config.SCREEN_HEIGHT - config.DIALOG_HEIGHT, config.SCREEN_WIDTH, config.DIALOG_HEIGHT), 0)
         pygame.draw.rect(screen, colors.BLACK, pygame.Rect(0, config.SCREEN_HEIGHT - config.DIALOG_HEIGHT, config.SCREEN_WIDTH, config.DIALOG_HEIGHT), 4)
@@ -18,6 +23,12 @@ class Battle:
         self.__printPokemon(screen, config)
         self.__printLifebars(screen, config)
 
+    def printText(self, screen, text, pkmnFont):
+        self.mainText = pkmnFont.render(text, False, colors.BLACK, None)
+
+        screen.blit(self.mainText, self.mainTextRect)
+
+    # PRIVATE METHODS
     def __printLifebars(self, screen, config):
 
         # Load lifer bar image

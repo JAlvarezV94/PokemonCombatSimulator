@@ -27,7 +27,7 @@ class Game:
         choosingScene = choosing.Choosing(pkmnFont, self.config)
         pkmn1 = parser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, "004"))
         pkmn2 = parser.parsePokemon(hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, "001"))
-        battleScene = battle.Battle(pkmn1, pkmn2)
+        battleScene = battle.Battle(pkmn1, pkmn2, pkmnFont, self.config)
 
         while not self.exit:
             for event in pygame.event.get():
@@ -62,6 +62,7 @@ class Game:
             elif self.currentScene == cscenes.BATTLE_SCENE:
                 battleScene.printPkmns(screen, self.config)
                 battleScene.printDialogContainer(screen, self.config)
+                battleScene.printText(screen, "Un Bulbasaur salvaje apareció!", pkmnFont)
 
             pygame.display.update()
 
