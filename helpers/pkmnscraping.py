@@ -93,5 +93,5 @@ def scrappingImages():
         print(currentName + "...Ok")
 
 
-# getPokemonList()
-# scrappingImages()
+getPokemonList()
+scrappingImages()
