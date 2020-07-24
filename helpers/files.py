@@ -33,7 +33,7 @@ def readAllPkmn(path):
         firstGen = pkmnJson["firstGen"]
 
     except:
-        print("something went worng.")
+        print("something went wrong.")
     
     return firstGen
 

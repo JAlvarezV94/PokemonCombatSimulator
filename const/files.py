@@ -1,2 +1,5 @@
-PKMN_JSON_PATH = "/home/jnoma/workspace/python/pkmn_cs/pkmn.json"
-PKMN_IMAGES_PATH = "/home/jnoma/workspace/python/pkmn_cs/src/images"
+import pathlib
+import os
+
+PKMN_JSON_PATH = os.path.dirname(pathlib.Path(__file__)) + "/../pkmn.json"
+PKMN_IMAGES_PATH = os.path.dirname(pathlib.Path(__file__)) + "/../src/images"

@@ -4,17 +4,19 @@ import pathlib
 from bs4 import BeautifulSoup
 import urllib.request
 import files
+import pathlib
+import os
 
-pkmonJsonString = "{\n\t\"firstGen\": [\n"
 baseURL = "http://pokedream.com"
 imagesURL = "/pokedex/images/gold/{}/{}.png"
 gen1URL = "/pokedex/pokemon?display=gen1"
-PKMN_JSON_PATH = "/home/jnoma/workspace/python/pkmn_cs/pkmn.json"
-PKMN_IMAGES_PATH = "/home/jnoma/workspace/python/pkmn_cs/src/images"
+PKMN_JSON_PATH = str(os.path.dirname(pathlib.Path(__file__))) + "/../pkmn.json"
+PKMN_IMAGES_PATH = str(os.path.dirname(pathlib.Path(__file__))) + "/../src/images"
 FRONT = "front"
 BACK = "back"
 
 def getPokemonList():
+    pkmonJsonString = "{\n\t\"firstGen\": [\n"
     pokedreamPage = requests.get(baseURL + gen1URL)
     soup = BeautifulSoup(pokedreamPage.content, "html.parser")
 
@@ -85,13 +87,13 @@ def scrappingImages():
 
     for currentPokemon in firstGenJSON:
         currentNumber = currentPokemon["Nº"]
-        currentName = currentPokemon["Name"]
+        currentName = currentPokemon["NAME"]
 
         urllib.request.urlretrieve(baseURL + imagesURL.format(FRONT, currentNumber), PKMN_IMAGES_PATH + "/{}-{}.png".format(FRONT, currentNumber))
         urllib.request.urlretrieve(baseURL + imagesURL.format(BACK, currentNumber), PKMN_IMAGES_PATH + "/{}-{}.png".format(BACK, currentNumber))
 
         print(currentName + "...Ok")
 
-
+print(PKMN_JSON_PATH)
 getPokemonList()
 scrappingImages()

@@ -86,8 +86,8 @@ class Game:
             pygame.display.flip()
 
     def randomEnemy(self):
-        chosenRow = random.randint(0, len(self.pkmnMatrix))
-        chosenColumn = random.randint(0, len(self.pkmnMatrix[chosenRow]))
+        chosenRow = random.randint(0, len(self.pkmnMatrix) - 1)
+        chosenColumn = random.randint(0, len(self.pkmnMatrix[chosenRow]) - 1)
         chosenPkmn = self.pkmnMatrix[chosenRow][chosenColumn]
 
         pkmnJson = hfiles.readPkmnByIndex(cfiles.PKMN_JSON_PATH, chosenPkmn["Nº"])
