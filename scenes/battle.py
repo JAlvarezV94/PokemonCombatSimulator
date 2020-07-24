@@ -15,19 +15,18 @@ class Battle:
 
 
     def printPkmns(self, screen, config):
-        self.printYourPokemon(screen, config)
+        self.__printPokemon(screen, config)
+        self.__printLifebars(screen, config)
 
-        pkmn2Image = pygame.image.load(cfiles.PKMN_IMAGES_PATH + "/front-{}.png".format(self.pkmn2.index))
+    def __printLifebars(self, screen, config):
 
-
-    def printYourPokemon(self, screen, config):
-        # Load Pokemon image
-        pkmn1Image = pygame.image.load(cfiles.PKMN_IMAGES_PATH + "/back-{}.png".format(self.pkmn1.index))
-        pkmn1Image = pygame.transform.scale(pkmn1Image, (config.PKMN_BACK_SCALE, config.PKMN_BACK_SCALE))
-
-        # Load lifer bar images
+        # Load lifer bar image
         pkmn1Lifebar = pygame.image.load("src/assets/pkmn-lifebar.png")
         pkmn1Lifebar = pygame.transform.scale(pkmn1Lifebar, (config.PKMN_LB1_WIDTH, config.PKMN_LB1_HEIGHT))
+
+        # Load enemy life bar image
+        pkmn2Lifebar = pygame.image.load("src/assets/pkmn-enemy-lifebar.png")
+        pkmn2Lifebar = pygame.transform.scale(pkmn2Lifebar, (config.PKMN_LB1_WIDTH, config.PKMN_LB1_HEIGHT))
 
         # Print lifebar bar (TODO: See how to improve the life bar position)
         pygame.draw.rect(screen, colors.GREEN, pygame.Rect(
@@ -37,6 +36,23 @@ class Battle:
              10
         ), 0)
 
+        # Print enemy lifebar bar (TODO: See how to improve the life bar position)
+        pygame.draw.rect(screen, colors.GREEN, pygame.Rect(90, 28, 180, 10))
+
+        # Print everything
+        screen.blit(pkmn1Lifebar, (config.SCREEN_WIDTH - config.PKMN_LB1_WIDTH, config.SCREEN_HEIGHT - config.DIALOG_HEIGHT - config.PKMN_LB1_HEIGHT))
+        screen.blit(pkmn2Lifebar, (0,0))
+
+    def __printPokemon(self, screen, config):
+        # Load Pokemon image
+        pkmn1Image = pygame.image.load(cfiles.PKMN_IMAGES_PATH + "/back-{}.png".format(self.pkmn1.index))
+        pkmn1Image = pygame.transform.scale(pkmn1Image, (config.PKMN_BACK_SCALE, config.PKMN_BACK_SCALE))
+
+        # Load enemy Pokemon image
+        pkmn2Image = pygame.image.load(cfiles.PKMN_IMAGES_PATH + "/front-{}.png".format(self.pkmn2.index))
+        pkmn2Image = pygame.transform.scale(pkmn2Image, (config.PKMN_FRONT_SCALE, config.PKMN_FRONT_SCALE))
+
         #Print everything
         screen.blit(pkmn1Image, (0, config.SCREEN_HEIGHT - (config.PKMN_BACK_SCALE + config.PKMN_BACK_PLUS_TOP)))
-        screen.blit(pkmn1Lifebar, (config.SCREEN_WIDTH - config.PKMN_LB1_WIDTH, config.SCREEN_HEIGHT - config.DIALOG_HEIGHT - config.PKMN_LB1_HEIGHT))
+        screen.blit(pkmn2Image, (config.SCREEN_WIDTH - config.PKMN_FRONT_SCALE, 0))
+        
