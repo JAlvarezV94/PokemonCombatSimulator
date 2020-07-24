@@ -1,15 +1,16 @@
 import pygame
 import const.files as cfiles
 import const.colors as colors
+import const.battle_states as states
 
 class Battle:
 
     def __init__(self, pkmn1, pkmn2, pkmnFont, config):
         self.pkmn1 = pkmn1
         self.pkmn2 = pkmn2
+        self.state = states.INITIAL_STATE
         self.mainText = pkmnFont.render("", False, colors.BLACK, None)
         self.mainTextRect = self.mainText.get_rect()
-        # self.mainTextRect.center = (int(config.SCREEN_WIDTH / 2), int(config.CURSOR_INITIAL_POSITION_Y / 2))
         self.mainTextRect.midleft = (config.DIALOG_MARGIN_SIDES, (config.SCREEN_HEIGHT - config.DIALOG_HEIGHT) + config.DIALOG_MARGIN_TOP)
 
 
@@ -23,10 +24,20 @@ class Battle:
         self.__printPokemon(screen, config)
         self.__printLifebars(screen, config)
 
-    def printText(self, screen, text, pkmnFont):
-        self.mainText = pkmnFont.render(text, False, colors.BLACK, None)
+    def printText(self, screen, pkmnFont):
 
+        if self.state == states.INITIAL_STATE:
+            text = "Un " + battleScene.pkmn2.name + " salvaje apareció!"
+        if self.state == states.WTD_STATE:
+            text = "¿Que debería hacer " + self.pkmn1.name + "?"
+            
+        
+        self.mainText = pkmnFont.render(text, False, colors.BLACK, None)
         screen.blit(self.mainText, self.mainTextRect)
+
+    def pressAButton(self):
+        if self.state == states.INITIAL_STATE:
+            self.state = states.WTD_STATE
 
     # PRIVATE METHODS
     def __printLifebars(self, screen, config):
@@ -66,4 +77,3 @@ class Battle:
         #Print everything
         screen.blit(pkmn1Image, (0, config.SCREEN_HEIGHT - (config.PKMN_BACK_SCALE + config.PKMN_BACK_PLUS_TOP)))
         screen.blit(pkmn2Image, (config.SCREEN_WIDTH - config.PKMN_FRONT_SCALE, 0))
-        

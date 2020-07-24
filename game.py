@@ -35,25 +35,31 @@ class Game:
                 # Add listener to close the window
                 if event.type == pygame.QUIT:
                     self.exit = True
+
                 # Add listener to the movements
                 if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                    print("RIGHT")
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         choosingScene.moveToRight(self.config, self.pkmnMatrix)
 
                 if pygame.key.get_pressed()[pygame.K_LEFT]:
+                    print("LEFT")
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         choosingScene.moveToLeft(self.config, self.pkmnMatrix)
 
                 if pygame.key.get_pressed()[pygame.K_UP]:
+                    print("UP")
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         choosingScene.moveToUp(self.config, self.pkmnMatrix)
 
                 if pygame.key.get_pressed()[pygame.K_DOWN]:
+                    print("DOWN")
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         choosingScene.moveToDown(self.config, self.pkmnMatrix)
 
                 # Add listener to A B buttons
                 if pygame.key.get_pressed()[pygame.K_z]:
+                    print("Z")
                     if self.currentScene == cscenes.CHOOSING_SCENE:
                         chosedPkmn = choosingScene.choosePokemon(self.pkmnMatrix)
                     
@@ -62,8 +68,7 @@ class Game:
                             battleScene.pkmn2 = self.randomEnemy()
                             self.currentScene = cscenes.BATTLE_SCENE
                     if self.currentScene == cscenes.BATTLE_SCENE:
-                        print("battle!")
-                    
+                        battleScene.pressAButton()
 
             # Adding configs
             screen.fill(self.sceenColor)
@@ -76,9 +81,9 @@ class Game:
             elif self.currentScene == cscenes.BATTLE_SCENE:
                 battleScene.printPkmns(screen, self.config)
                 battleScene.printDialogContainer(screen, self.config)
-                battleScene.printText(screen, "Un " + battleScene.pkmn2.name + " salvaje apareció!", pkmnFont)
+                battleScene.printText(screen, pkmnFont)
 
-            pygame.display.update()
+            pygame.display.flip()
 
     def randomEnemy(self):
         chosenRow = random.randint(0, len(self.pkmnMatrix))
